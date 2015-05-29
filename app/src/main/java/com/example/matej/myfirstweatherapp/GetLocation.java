@@ -1,19 +1,18 @@
 package com.example.matej.myfirstweatherapp;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class GetLocation extends ActionBarActivity {
+public class GetLocation extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_get_location);
         Intent intent = getIntent();
         String location = intent.getStringExtra(MainActivity.KEY_LOCATION);
 
@@ -21,7 +20,8 @@ public class GetLocation extends ActionBarActivity {
         textView.setTextSize(40);
 
         if(location.length() == 0){
-            textView.setText("No location");
+            String noLocation = getResources().getString(R.string.no_location);
+            textView.setText(noLocation);
         } else {
             textView.setText(location);
         }
