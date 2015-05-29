@@ -15,6 +15,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 
@@ -71,17 +72,22 @@ public class MainActivity extends AppCompatActivity
 
     /** Called when the user clicks the Refresh button */
     public void getLocation(View view) {
-        String location;
+        String lat, lon;
         if(mLocation != null) {
-            DecimalFormat df = new DecimalFormat("#.00");
-            String lat = String.valueOf(df.format(mLocation.getLatitude()));
-            String lon = String.valueOf(df.format(mLocation.getLongitude()));
-            location = lat + "\n" + lon;
+            lat = String.valueOf(mLocation.getLatitude());
+            lon = String.valueOf(mLocation.getLongitude());
         } else {
-            location = "Location is null";
+            return;
         }
 
-        displayTextInActivity(location);
+        OpenWeatherForecast owf = new OpenWeatherForecast(lat, lon);
+        String response = "";
+        try {
+            response = owf.getForecast();
+        } catch(IOException e){
+
+        }
+        displayTextInActivity(response);
     }
 
     /** Build Google API Client */
