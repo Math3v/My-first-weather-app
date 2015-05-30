@@ -1,5 +1,6 @@
 package com.example.matej.myfirstweatherapp;
 
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -15,6 +16,12 @@ import java.net.URL;
  * Created by matej on 30.5.2015.
  */
 public class HttpRequestHandler {
+
+    protected AppCompatActivity context;
+
+    public HttpRequestHandler(AppCompatActivity context) {
+        this.context = context;
+    }
 
     public String getForecast(URL url) throws IOException {
         InputStream is = null;
@@ -38,6 +45,16 @@ public class HttpRequestHandler {
             }
             int response = conn.getResponseCode();
             Log.d(MainActivity.APP_TAG, "The response is: " + response);
+
+            if(response != 200) {
+                /**
+                 *  TODO: ErrorHandler raise an error
+                 *  Can't create handler inside thread that has not called Looper.prepare()
+                 *  */
+                ErrorHandler.handle(MainActivity.APP_TAG, context.getResources().getString(R.string.error_network), context);
+                return "";
+            }
+
             is = conn.getInputStream();
 
             // Convert the InputStream into a string

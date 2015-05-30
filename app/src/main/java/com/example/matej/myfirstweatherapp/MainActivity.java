@@ -1,6 +1,5 @@
 package com.example.matej.myfirstweatherapp;
 
-import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 
 
@@ -24,13 +22,15 @@ public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     public static final String APP_TAG = "MyFirstWeatherApp";
-
-    public static final String KEY_LOCATION = "MyWeatherAppLocation";
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
 
     private boolean mResolvingError = false;
     private static final int REQUEST_RESOLVE_ERROR = 1001;
+
+    protected TextView tv_temperature;
+    protected TextView tv_humidity;
+    protected EditText et_town;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         buildGoogleApiClient();
         mGoogleApiClient.connect();
+
+        tv_temperature = (TextView) findViewById(R.id.temperature_view);
+        tv_humidity = (TextView) findViewById(R.id.humidity_view);
+        et_town = (EditText) findViewById(R.id.edit_message);
     }
 
     @Override
@@ -63,20 +67,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     /** Called when the user clicks the Refresh button */
-    public void getLocation(View view) {
-        String lat, lon;
-        if(mLocation != null) {
+    public void getForecast(View view) {
+        String lat, lon, town;
+        lat = lon = town = null;
+
+        if(et_town.getText().toString().length() > 0) {
+            town = et_town.getText().toString();
+        }
+        else if(mLocation != null) {
             DecimalFormat df = new DecimalFormat("##.####");
             lat = String.valueOf(df.format(mLocation.getLatitude()));
             lon = String.valueOf(df.format(mLocation.getLongitude()));
             Log.d(APP_TAG, "Latitude: " + lat + " Longitude: " + lon);
         } else {
+            ErrorHandler.handle(APP_TAG, "Cannot get latitude and longitude", this);
             return;
         }
 
-        TextView temp = (TextView) findViewById(R.id.temperature_view);
-        TextView humid = (TextView) findViewById(R.id.humidity_view);
-        OpenWeatherForecast owf = new OpenWeatherForecast(lat, lon, temp, humid);
+        OpenWeatherForecast owf = new OpenWeatherForecast(lat, lon, town, this);
         owf.execute();
     }
 
@@ -103,7 +111,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        Log.d(APP_TAG, "Google Api connection failed");
+        Log.e(APP_TAG, "Google Api connection failed");
         if (mResolvingError) {
             // Already attempting to resolve an error.
             return;
@@ -116,7 +124,7 @@ public class MainActivity extends AppCompatActivity
                 mGoogleApiClient.connect();
             }
         } else {
-            Log.d(APP_TAG, "Error: " + result.getErrorCode());
+            Log.e(APP_TAG, "Error: " + result.getErrorCode());
             mResolvingError = true;
         }
     }

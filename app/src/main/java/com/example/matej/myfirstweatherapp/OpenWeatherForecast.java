@@ -2,7 +2,6 @@ package com.example.matej.myfirstweatherapp;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,37 +16,41 @@ import java.net.URL;
 public class OpenWeatherForecast extends AsyncTask <String, Void, String> {
 
     private URL url;
-    private TextView temp;
-    private TextView humid;
-    private String stemp;
-    private String shumid;
+    private MainActivity context;
 
-    public OpenWeatherForecast(String lat, String lon, TextView temp, TextView humid) {
-        this.temp = temp;
-        this.humid = humid;
+    private String s_temperature;
+    private String s_humidity;
+
+    public OpenWeatherForecast(String lat, String lon, String town, MainActivity context) {
+
+        this.context = context;
+
         try {
-            this.url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&units=metric");
+            if(town != null && town.length() > 0) {
+                this.url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + town + "&units=metric");
+            } else {
+                this.url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&units=metric");
+            }
         } catch (MalformedURLException e) {
-            Log.e(MainActivity.APP_TAG, "Malformed URL: " + url);
+            ErrorHandler.handle(MainActivity.APP_TAG, "Malformed URL: " + url, context);
         }
-        Log.d(MainActivity.APP_TAG, "URL: " + url);
     }
 
     @Override
     protected String doInBackground(String... params) {
         JSONObject ojs;
-        HttpRequestHandler http = new HttpRequestHandler();
+        HttpRequestHandler http = new HttpRequestHandler(context);
         try {
             ojs = new JSONObject(http.getForecast(url));
             String main = ojs.getString("main");
 
-            stemp = new JSONObject(main).getString("temp");
-            shumid = new JSONObject(main).getString("humidity");
+            s_temperature = new JSONObject(main).getString("temp");
+            s_humidity =    new JSONObject(main).getString("humidity");
 
         } catch (IOException e) {
-            Log.e(MainActivity.APP_TAG, e.getMessage());
+            ErrorHandler.handle(MainActivity.APP_TAG,  e.getMessage(), context);
         } catch (JSONException e) {
-            Log.e(MainActivity.APP_TAG, e.getMessage());
+            ErrorHandler.handle(MainActivity.APP_TAG, e.getMessage(), context);
         }
 
         return "";
@@ -55,8 +58,8 @@ public class OpenWeatherForecast extends AsyncTask <String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        temp.setText(stemp);
-        humid.setText(shumid);
+        context.tv_temperature.setText(s_temperature);
+        context.tv_humidity.setText(s_humidity);
     }
 
 }

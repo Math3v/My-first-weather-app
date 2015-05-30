@@ -3,11 +3,13 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="edit_message">Location...</string>
+    <string name="edit_message">Mesto...</string>
     <string name="button_send">Refresh</string>
     <string name="title_activity_get_location">GetLocation</string>
     <string name="no_location">No location!</string>
     <string name="temperature">Teplota</string>
     <string name="humidity">Vlhkost</string>
+
+    <string name="error_network">Server neodpovedal</string>
 
 </resources>

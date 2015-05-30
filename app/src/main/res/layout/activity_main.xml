@@ -12,13 +12,14 @@
         <EditText android:id="@+id/edit_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="@string/edit_message" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_send"
-            android:onClick="getLocation"/>
+            android:onClick="getForecast"/>
     </LinearLayout>
 
 
@@ -27,13 +28,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="48px"
-        android:hint="Temp"/>
+        android:hint="@string/temperature"/>
 
     <TextView
         android:id="@+id/humidity_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="48px"
-        android:hint="Humid"/>
+        android:hint="@string/humidity"/>
 
 </LinearLayout>
