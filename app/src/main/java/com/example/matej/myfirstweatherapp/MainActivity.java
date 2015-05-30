@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /** Display text in new activity */
-    private boolean displayTextInActivity(String text) {
+    protected boolean displayTextInActivity(String text) {
         Intent intent = new Intent(this, GetLocation.class);
         intent.putExtra(KEY_LOCATION, text);
         startActivity(intent);
@@ -74,20 +75,18 @@ public class MainActivity extends AppCompatActivity
     public void getLocation(View view) {
         String lat, lon;
         if(mLocation != null) {
-            lat = String.valueOf(mLocation.getLatitude());
-            lon = String.valueOf(mLocation.getLongitude());
+            DecimalFormat df = new DecimalFormat("##.####");
+            lat = String.valueOf(df.format(mLocation.getLatitude()));
+            lon = String.valueOf(df.format(mLocation.getLongitude()));
+            Log.d(APP_TAG, "Latitude: " + lat + " Longitude: " + lon);
         } else {
             return;
         }
 
-        OpenWeatherForecast owf = new OpenWeatherForecast(lat, lon);
-        String response = "";
-        try {
-            response = owf.getForecast();
-        } catch(IOException e){
-
-        }
-        displayTextInActivity(response);
+        TextView temp = (TextView) findViewById(R.id.temperature_view);
+        TextView humid = (TextView) findViewById(R.id.humidity_view);
+        OpenWeatherForecast owf = new OpenWeatherForecast(lat, lon, temp, humid);
+        owf.execute();
     }
 
     /** Build Google API Client */

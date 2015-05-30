@@ -7,5 +7,7 @@
     <string name="button_send">Refresh</string>
     <string name="title_activity_get_location">GetLocation</string>
     <string name="no_location">No location!</string>
+    <string name="temperature">Teplota: </string>
+    <string name="humidity">Vlhkost: </string>
 
 </resources>
