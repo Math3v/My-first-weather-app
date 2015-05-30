@@ -62,15 +62,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /** Display text in new activity */
-    protected boolean displayTextInActivity(String text) {
-        Intent intent = new Intent(this, GetLocation.class);
-        intent.putExtra(KEY_LOCATION, text);
-        startActivity(intent);
-
-        return true;
-    }
-
     /** Called when the user clicks the Refresh button */
     public void getLocation(View view) {
         String lat, lon;
