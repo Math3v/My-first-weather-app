@@ -24,8 +24,11 @@ public class OpenWeatherForecast extends AsyncTask <String, Void, String> {
     private String s_humidity;
 
     public OpenWeatherForecast(String lat, String lon, String town, MainActivity context) {
-
         this.context = context;
+        buildUrl(lat, lon, town);
+    }
+
+    private void buildUrl(String lat, String lon, String town) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String tempUnit = prefs.getString("pref_temperatureUnit", "NULL");
         String s_url = "";
@@ -40,8 +43,11 @@ public class OpenWeatherForecast extends AsyncTask <String, Void, String> {
             if(tempUnit.equals("celzius")) {
                 s_url += "&units=metric";
             }
-
+            else {
+                s_url += "&units=imperial";
+            }
             this.url = new URL(s_url);
+
         } catch (MalformedURLException e) {
             ErrorHandler.handle(MainActivity.APP_TAG, "Malformed URL: " + url, context);
         }
