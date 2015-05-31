@@ -98,8 +98,14 @@ public class CurrentOpenWeather extends AsyncTask <String, Void, String> {
 
         context.tv_temperature.setText(s_temperature);
         context.tv_humidity.setText(s_humidity);
-        Bitmap bm = BitmapFactory.decodeByteArray(b_icon, 0, b_icon.length);
-        context.iv_icon.setImageBitmap(bm);
+
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        opts.inScaled = false;
+        Bitmap raw = BitmapFactory.decodeByteArray(b_icon, 0, b_icon.length, opts);
+        Bitmap scaled = Bitmap.createScaledBitmap(raw, raw.getWidth() * 32, raw.getHeight() * 32, true);
+
+        context.iv_icon.setImageBitmap(scaled);
     }
 
     protected void formatHumidity() {
@@ -124,4 +130,7 @@ public class CurrentOpenWeather extends AsyncTask <String, Void, String> {
         }
     }
 
+    /**
+     * I LOVE YOUUUUUUU <3
+     */
 }

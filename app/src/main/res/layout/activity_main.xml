@@ -52,13 +52,15 @@
                 android:textSize="48px"
                 android:padding="3dip" />
         </TableRow>
-        </TableLayout>
+    </TableLayout>
 
     <ImageView
         android:id="@+id/weather_icon"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:scaleType="fitCenter" />
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
+        android:gravity="right" />
+
 
 </LinearLayout>
