@@ -23,18 +23,42 @@
     </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/temperature_view"
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="48px"
-        android:hint="@string/temperature"/>
+        android:orientation="vertical"
+        android:stretchColumns="1" >
+        <TableRow>
+            <TextView
+                android:textSize="48px"
+                android:hint="@string/temperature"
+                android:textStyle="bold"
+                android:padding="3dip" />
+            <TextView
+                android:id="@+id/temperature_view"
+                android:gravity="right"
+                android:textSize="48px"
+                android:padding="3dip" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:textSize="48px"
+                android:hint="@string/humidity"
+                android:padding="3dip"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/humidity_view"
+                android:gravity="right"
+                android:textSize="48px"
+                android:padding="3dip" />
+        </TableRow>
+        </TableLayout>
 
-    <TextView
-        android:id="@+id/humidity_view"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/weather_icon"
         android:layout_height="wrap_content"
-        android:textSize="48px"
-        android:hint="@string/humidity"/>
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitCenter" />
 
 </LinearLayout>

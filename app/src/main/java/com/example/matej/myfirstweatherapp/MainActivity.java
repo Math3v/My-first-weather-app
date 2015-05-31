@@ -2,7 +2,6 @@ package com.example.matej.myfirstweatherapp;
 
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     protected TextView tv_temperature;
     protected TextView tv_humidity;
     protected EditText et_town;
+    protected ImageView iv_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity
         tv_temperature = (TextView) findViewById(R.id.temperature_view);
         tv_humidity = (TextView) findViewById(R.id.humidity_view);
         et_town = (EditText) findViewById(R.id.edit_message);
+        iv_icon = (ImageView) findViewById(R.id.weather_icon);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        OpenWeatherForecast owf = new OpenWeatherForecast(lat, lon, town, this);
+        CurrentOpenWeather owf = new CurrentOpenWeather(lat, lon, town, this);
         owf.execute();
     }
 

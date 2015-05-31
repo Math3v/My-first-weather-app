@@ -1,29 +1,36 @@
 package com.example.matej.myfirstweatherapp;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 /**
  * Created by matej on 29.5.2015.
  */
-public class OpenWeatherForecast extends AsyncTask <String, Void, String> {
+public class CurrentOpenWeather extends AsyncTask <String, Void, String> {
 
     private URL url;
     private MainActivity context;
 
     private String s_temperature;
     private String s_humidity;
+    private String s_icon;
+    private byte[] b_icon;
 
-    public OpenWeatherForecast(String lat, String lon, String town, MainActivity context) {
+    public CurrentOpenWeather(String lat, String lon, String town, MainActivity context) {
         this.context = context;
         buildUrl(lat, lon, town);
     }
@@ -64,8 +71,16 @@ public class OpenWeatherForecast extends AsyncTask <String, Void, String> {
             ojs = new JSONObject(http.getForecast(url));
             String main = ojs.getString("main");
 
-            s_temperature = new JSONObject(main).getString("temp");
-            s_humidity =    new JSONObject(main).getString("humidity");
+            s_temperature = new JSONObject(main).getString("temp");                     // Get temperature
+            s_humidity =    new JSONObject(main).getString("humidity");                 // Get humidity value
+            s_icon =        new JSONObject(                                             // Get weather from root JSON
+                            new JSONArray(ojs.getString("weather")).get(0).toString()   // Get first element of weather array
+                            ).getString("icon");                                        // Get value of icon
+
+            String iconUrl = "http://openweathermap.org/img/w/" + s_icon + ".png";
+            Log.d(context.APP_TAG, "IconURL: " + iconUrl);
+            b_icon = ImageDownloader.download(iconUrl);
+            Log.d(context.APP_TAG, "ByteArray: " + b_icon.toString());
 
         } catch (IOException e) {
             ErrorHandler.handle(MainActivity.APP_TAG,  e.getMessage(), context);
@@ -78,8 +93,35 @@ public class OpenWeatherForecast extends AsyncTask <String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
+        formatTemperature();
+        formatHumidity();
+
         context.tv_temperature.setText(s_temperature);
         context.tv_humidity.setText(s_humidity);
+        Bitmap bm = BitmapFactory.decodeByteArray(b_icon, 0, b_icon.length);
+        context.iv_icon.setImageBitmap(bm);
+    }
+
+    protected void formatHumidity() {
+        s_humidity += " %";
+    }
+
+    protected void formatTemperature() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String tempUnit = prefs.getString("pref_temperatureUnit", "NULL");
+        DecimalFormat df = new DecimalFormat("##.#");
+
+        try {
+            s_temperature = df.format(Double.parseDouble(s_temperature));
+        } catch (IllegalArgumentException e) {
+            Log.e(context.APP_TAG, "Error: [DecimalFormat] " + e.getMessage());
+        }
+
+        if(tempUnit.equals("celzius")) {
+            s_temperature += "  \u2103";
+        } else {
+            s_temperature += " \u2109";
+        }
     }
 
 }
