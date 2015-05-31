@@ -1,6 +1,8 @@
 package com.example.matej.myfirstweatherapp;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -24,16 +26,28 @@ public class OpenWeatherForecast extends AsyncTask <String, Void, String> {
     public OpenWeatherForecast(String lat, String lon, String town, MainActivity context) {
 
         this.context = context;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String tempUnit = prefs.getString("pref_temperatureUnit", "NULL");
+        String s_url = "";
 
         try {
             if(town != null && town.length() > 0) {
-                this.url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + town + "&units=metric");
+                s_url = "http://api.openweathermap.org/data/2.5/weather?q=" + town;
             } else {
-                this.url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&units=metric");
+                s_url = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon;
             }
+
+            if(tempUnit.equals("celzius")) {
+                s_url += "&units=metric";
+            }
+
+            this.url = new URL(s_url);
         } catch (MalformedURLException e) {
             ErrorHandler.handle(MainActivity.APP_TAG, "Malformed URL: " + url, context);
         }
+
+        Log.d(context.APP_TAG, "Temperature unit: " + tempUnit);
+        Log.d(context.APP_TAG, "URL: " + s_url);
     }
 
     @Override

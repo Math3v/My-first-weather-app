@@ -5,11 +5,25 @@
     <string name="action_settings">Settings</string>
     <string name="edit_message">Mesto...</string>
     <string name="button_send">Refresh</string>
-    <string name="title_activity_get_location">GetLocation</string>
+    <string name="title_activity_settings_activity">Settings</string>
     <string name="no_location">No location!</string>
     <string name="temperature">Teplota</string>
     <string name="humidity">Vlhkost</string>
 
     <string name="error_network">Server neodpovedal</string>
+
+    <string name="pref_temperatureUnit">Jednotky</string>
+    <string name="pref_temperatureUnit_default">celzius</string>
+
+
+    <string-array name="pref_temperatureUnit_entries">
+        <item>Celzius</item>
+        <item>Farenheit</item>
+    </string-array>
+
+    <string-array name="pref_temperatureUnit_values">
+        <item>celzius</item>
+        <item>farenheit</item>
+    </string-array>
 
 </resources>

@@ -1,8 +1,11 @@
 package com.example.matej.myfirstweatherapp;
 
+import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -36,12 +39,15 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         buildGoogleApiClient();
         mGoogleApiClient.connect();
 
         tv_temperature = (TextView) findViewById(R.id.temperature_view);
         tv_humidity = (TextView) findViewById(R.id.humidity_view);
         et_town = (EditText) findViewById(R.id.edit_message);
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
     @Override
@@ -60,6 +66,9 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(this, SettingsActivity.class);
+            //startActivityForResult(i, 1);
+            startActivity(i);
             return true;
         }
 
