@@ -1,18 +1,17 @@
 <resources>
     <string name="app_name">My first weather app</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="edit_message">Mesto...</string>
-    <string name="button_send">Refresh</string>
     <string name="title_activity_settings_activity">Settings</string>
+    <string name="edit_message">Town...</string>
+    <string name="button_send">Refresh</string>
     <string name="no_location">No location!</string>
-    <string name="temperature">Teplota</string>
-    <string name="humidity">Vlhkost</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
 
-    <string name="error_network">Server neodpovedal</string>
+    <string name="error_network">Server not responding</string>
 
-    <string name="pref_temperatureUnit">Jednotky</string>
+    <string name="pref_temperatureUnit">Units</string>
     <string name="pref_temperatureUnit_default">celzius</string>
 
 
